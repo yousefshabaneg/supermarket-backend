@@ -1,0 +1,1097 @@
+{
+	"info": {
+		"_postman_id": "9dd75a96-2f33-410e-818b-0a1f10b973a4",
+		"name": "SuperMarket API",
+		"description": "## **The** SuperMarket API **Documentaion**\n\nThis API contains endpoints to simplify the super market application to dealt with cashiers and creation of receipts and also the part of crud operation of the Admin page.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15622340"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Test Cashier2",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "cashier3@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "passwordConfirm",
+									"value": "12345678",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Auth}}/signup",
+							"host": [
+								"{{Auth}}"
+							],
+							"path": [
+								"signup"
+							]
+						},
+						"description": "Sign up providing your name, email, image and password with passwordConfirm.\n\nThe email must be unique (never used to create an account before)."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@email.com\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Auth}}/login",
+							"host": [
+								"{{Auth}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Login using your email and password. you will receive the token and it is valid for 14 Days by default."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for Authentication Service that contains:\n\n1. Login Route\n    \n2. Signup Route"
+		},
+		{
+			"name": "Cashiers",
+			"item": [
+				{
+					"name": "GET ALL Cashiers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Users}}/allCashiers?name=Cashier 3",
+							"host": [
+								"{{Users}}"
+							],
+							"path": [
+								"allCashiers"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Cashier 3"
+								}
+							]
+						},
+						"description": "Use this endpoint to get all the cashiers in the database. Only admins can get all cashiers.\n\n## Query Features:\n\n## 1) FILTERING\n\nYou can query for any user property. These are the available operators: gte, ft, lte, lt.\n\nFor example: `user/allCashiers?name=yousef`\n\nThis will return all the cashiers whose name is 'yousef'.\n\n## 2) SORTING\n\nUse 'sort' and add a comma between the properties you want to sort by. Everything is sorted in ascending order by default. Add a minus sign to sort in descending order.\n\nFor example: `user/allCashiers?sort=name`\n\nThis will return all cashiers sorted alphabetically by name (from A to Z, to go from Z to A use `user/allCashiers?sort=name`).\n\n## 3) LIMIT FIELDS\n\nYou can also choose the cashier properties you want to get back (or exclude) by using the 'fields' parameter.\n\nFor example: `user/allCashiers?fields=email` would return all cashiers but only displaying their emails.\n\n## 4) PAGINATE\n\nOrganize the cashiers into pages. Just specify the 'page' and 'limit' parameters to suit your taste.\n\n#### Note how you can use 'limit' to set how many results you want to get back. Suppose that we have 25 cashiers in total.\n\n1. `user/allCashiers?page=3&limit=5` would return csahiers 11-15.\n    \n\n\\*_REMEMBER THAT YOU CAN COMBINE ALL THESE FILTERS__\\*_Here's an example combining sorting and pagination. This query returns page 2 with a limit of 2 users alphabetically sorted by their name, so you can expect names starting with 'a' and 'b'.\n\n`user/allCashiers?sort=name&page=2&limit=2`"
+					},
+					"response": []
+				}
+			],
+			"description": "This is an endpoint for Admin to Get all cashiers"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "GET ALL Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Users}}?role=Cashier",
+							"host": [
+								"{{Users}}"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "Cashier"
+								}
+							]
+						},
+						"description": "`Same as GetAllCashiers but this is for all users whose role = Cashier or Admin`\n\nand Same Filteration and Sorting ...."
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL Admins",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Users}}/allAdmins",
+							"host": [
+								"{{Users}}"
+							],
+							"path": [
+								"allAdmins"
+							]
+						},
+						"description": "`Same as GetAllCashiers but this is for all users whose role = Admin`\n\nand Same Filteration and Sorting ...."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Users}}/63b9202ccf52d9e3e12154a4",
+							"host": [
+								"{{Users}}"
+							],
+							"path": [
+								"63b9202ccf52d9e3e12154a4"
+							]
+						},
+						"description": "Get a user passing his id as a parameter. Only admins can perform this action."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User By Id",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Navy/Downloads/User-avatar.png",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Cashier 2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Users}}/66485dcf6ed7cd6c67731297",
+							"host": [
+								"{{Users}}"
+							],
+							"path": [
+								"66485dcf6ed7cd6c67731297"
+							]
+						},
+						"description": "Admins are also able to edit every user passing in their id. Regular users can't use this route,"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Users}}/66485da4bff588958def4d92",
+							"host": [
+								"{{Users}}"
+							],
+							"path": [
+								"66485da4bff588958def4d92"
+							]
+						},
+						"description": "Passing in the user id, admins are able to delete users. Expect a 204 No Content status code and no data back."
+					},
+					"response": []
+				}
+			],
+			"description": "All users (admins-cashiers) CRUD Operations that only Accessible for admin to make and changes in users table."
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "GET ALL Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Categories}}",
+							"host": [
+								"{{Categories}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						},
+						"description": "`Same Get All Logic Filteration, Pagination, Sorting and so on.`"
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE CATEGORY",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Mobile\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Categories}}",
+							"host": [
+								"{{Categories}}"
+							]
+						},
+						"description": "Create Category By name"
+					},
+					"response": []
+				},
+				{
+					"name": "GET CATEGORY BY ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Categories}}/6633737a144152e08cdb5c9d",
+							"host": [
+								"{{Categories}}"
+							],
+							"path": [
+								"6633737a144152e08cdb5c9d"
+							]
+						},
+						"description": "Get a specific category passing in its id."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Yousef Shaban\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Categories}}/6633737a144152e08cdb5c9d",
+							"host": [
+								"{{Categories}}"
+							],
+							"path": [
+								"6633737a144152e08cdb5c9d"
+							]
+						},
+						"description": "Update name of category/:id"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CATEGORY",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{Categories}}/66339568ba8d19d48e84b155",
+							"host": [
+								"{{Categories}}"
+							],
+							"path": [
+								"66339568ba8d19d48e84b155"
+							]
+						},
+						"description": "Deleting a Category"
+					},
+					"response": []
+				}
+			],
+			"description": "Category or Products CRUD Operations"
+		},
+		{
+			"name": "Branch",
+			"item": [
+				{
+					"name": "GET ALL Branches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Branches}}",
+							"host": [
+								"{{Branches}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						},
+						"description": "`Same Get All Logic Filteration, Pagination, Sorting and so on.`"
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE Branch",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Br1\",\r\n    \"address\":\"Tanta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Branches}}",
+							"host": [
+								"{{Branches}}"
+							]
+						},
+						"description": "Get Branch"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Branch BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Branches}}/663613fd0cb6625690f6b119",
+							"host": [
+								"{{Branches}}"
+							],
+							"path": [
+								"663613fd0cb6625690f6b119"
+							]
+						},
+						"description": "Get a specific branch passing in its id."
+					},
+					"response": []
+				},
+				{
+					"name": "Update branch",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Yousef Shaban\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Branches}}/663613fd0cb6625690f6b119",
+							"host": [
+								"{{Branches}}"
+							],
+							"path": [
+								"663613fd0cb6625690f6b119"
+							]
+						},
+						"description": "update branch"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Branch",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{Branches}}/6647a4601b2d8d116ef4b36d",
+							"host": [
+								"{{Branches}}"
+							],
+							"path": [
+								"6647a4601b2d8d116ef4b36d"
+							]
+						},
+						"description": "Delete Branch"
+					},
+					"response": []
+				}
+			],
+			"description": "Branch CRUD Operations"
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "GET ALL Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Products}}",
+							"host": [
+								"{{Products}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "6",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "15.99",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "-price",
+									"disabled": true
+								},
+								{
+									"key": "fields",
+									"value": "price,ratingsQuantity",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "1500",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "Mens",
+									"disabled": true
+								},
+								{
+									"key": "categoryId",
+									"value": "6648610ffd79f94bc199537e",
+									"disabled": true
+								}
+							]
+						},
+						"description": "`Same Get All Logic Filteration, Pagination, Sorting and so on.`"
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE PRODUCT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "IPhone 14",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "A Mobile From Apple A Mobile From Apple A Mobile From Apple",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "8",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "1200",
+									"type": "text"
+								},
+								{
+									"key": "imageCover",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/Navy/Downloads/icon-256x256.png",
+									"disabled": true
+								},
+								{
+									"key": "categoryId",
+									"value": "6648610ffd79f94bc199537e",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Products}}",
+							"host": [
+								"{{Products}}"
+							]
+						},
+						"description": "Creation of Product"
+					},
+					"response": []
+				},
+				{
+					"name": "GET PRODUCTBY ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Products}}/66375976a9aebb4bbded2147",
+							"host": [
+								"{{Products}}"
+							],
+							"path": [
+								"66375976a9aebb4bbded2147"
+							]
+						},
+						"description": "Get a specific Product passing in its id."
+					},
+					"response": []
+				},
+				{
+					"name": "Update PRODUCT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "imageCover",
+									"type": "file",
+									"src": "/C:/Users/Navy/Downloads/default-product.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{Products}}/664862c8f55f02d7cb6b254a",
+							"host": [
+								"{{Products}}"
+							],
+							"path": [
+								"664862c8f55f02d7cb6b254a"
+							]
+						},
+						"description": "Updating a Product"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PRODUCT",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{Products}}/664862c8f55f02d7cb6b254a",
+							"host": [
+								"{{Products}}"
+							],
+							"path": [
+								"664862c8f55f02d7cb6b254a"
+							]
+						},
+						"description": "Delete A Product"
+					},
+					"response": []
+				}
+			],
+			"description": "Products CRUD Operations"
+		},
+		{
+			"name": "Receipt",
+			"item": [
+				{
+					"name": "GET Receipts By Date Range",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Receipts}}/filterReceiptsByDateRange?startDate=2024-05-14&endDate=2024-05-15",
+							"host": [
+								"{{Receipts}}"
+							],
+							"path": [
+								"filterReceiptsByDateRange"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-05-14"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-05-15"
+								}
+							]
+						},
+						"description": "`You can pass startDate,endDate to Get all receipts within this period`"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Receipts By Product Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Receipts}}/filterReceiptsByProductDetails?name=IPhone 15",
+							"host": [
+								"{{Receipts}}"
+							],
+							"path": [
+								"filterReceiptsByProductDetails"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "IPhone 15"
+								}
+							]
+						},
+						"description": "`You can pass name,categoryId, and price of a product to get all receipts that contains this product information`"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Top 3 Cashiers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Receipts}}/top3-cashiers",
+							"host": [
+								"{{Receipts}}"
+							],
+							"path": [
+								"top3-cashiers"
+							]
+						},
+						"description": "`Get the top most cashiers of number of purchases (receipts)`"
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL Receipts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Receipts}}?branchId=6647a4f852c4d26837d3aba2",
+							"host": [
+								"{{Receipts}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "totalAmount",
+									"value": "6900",
+									"disabled": true
+								},
+								{
+									"key": "date[gte]",
+									"value": "2024-05-18",
+									"disabled": true
+								},
+								{
+									"key": "date[lte]",
+									"value": "2024-05-15",
+									"disabled": true
+								},
+								{
+									"key": "branchId",
+									"value": "6647a4f852c4d26837d3aba2"
+								},
+								{
+									"key": "cashierId",
+									"value": "66485dcf6ed7cd6c67731297",
+									"disabled": true
+								},
+								{
+									"key": "fields",
+									"value": "branchId",
+									"disabled": true
+								}
+							]
+						},
+						"description": "`Same as any Get all Filteration, Pagination, and so on`"
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE Receipt",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cashierId\":\"66486081fd79f94bc1995376\",\r\n    \"branchId\":\"6647a4f852c4d26837d3aba2\",\r\n    \"date\": \"2024-05-18 13:00:00\",\r\n    \"items\": [\r\n        {\r\n            \"productId\": \"66486453f55f02d7cb6b255b\",\r\n            \"quantity\": 2,\r\n            \"price\": 1200\r\n        },\r\n        {\r\n            \"productId\": \"66486375f55f02d7cb6b2551\",\r\n            \"quantity\": 3,\r\n            \"price\": 1500\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Receipts}}",
+							"host": [
+								"{{Receipts}}"
+							]
+						},
+						"description": "Create the receipt"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Receipt BY ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Receipts}}/6633737a144152e08cdb5c9d",
+							"host": [
+								"{{Receipts}}"
+							],
+							"path": [
+								"6633737a144152e08cdb5c9d"
+							]
+						},
+						"description": "Get a specific Receipt passing in its id."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Receipt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2024-05-14 13:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Receipts}}/66487068b81d3e14aa48ffde",
+							"host": [
+								"{{Receipts}}"
+							],
+							"path": [
+								"66487068b81d3e14aa48ffde"
+							]
+						},
+						"description": "Update Receipt"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Receipt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{Receipts}}/66486c93ccdf38fbc6e429b4",
+							"host": [
+								"{{Receipts}}"
+							],
+							"path": [
+								"66486c93ccdf38fbc6e429b4"
+							]
+						},
+						"description": "Delete Receipt"
+					},
+					"response": []
+				}
+			],
+			"description": "Get Receipts API:  \n• an endpoint to retrieve receipts full details.  \n• pagination to handle large sets of data.  \n• filtration options to filter receipts based on:  \n• Cashier ID  \n• Date range  \n• Total amount  \n• Branch ID  \n• Product details (name, category, price)"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Base_Url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "Users",
+			"value": "{{Base_Url}}/user",
+			"type": "string"
+		},
+		{
+			"key": "Branches",
+			"value": "{{Base_Url}}/branch",
+			"type": "string"
+		},
+		{
+			"key": "Products",
+			"value": "{{Base_Url}}/product",
+			"type": "string"
+		},
+		{
+			"key": "Auth",
+			"value": "{{Base_Url}}/auth",
+			"type": "string"
+		},
+		{
+			"key": "jwt",
+			"value": ""
+		},
+		{
+			"key": "Receipts",
+			"value": "{{Base_Url}}/receipt",
+			"type": "string"
+		},
+		{
+			"key": "Categories",
+			"value": "{{Base_Url}}/category",
+			"type": "string"
+		}
+	]
+}
