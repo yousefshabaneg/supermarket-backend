@@ -2,6 +2,8 @@
 
 This project is a SuperMarket backend API built using Typescript, Node.js, Express.js, and MongoDB with Mongoose. It includes features for managing admins, cashiers, branches, products, categories and receipts, along with JWT-based authentication and authorization.
 
+### **Try the live version [https://supermarket-backend-sxx3.onrender.com](https://supermarket-backend-sxx3.onrender.com/)**
+
 ## Table of Contents
 
 - [Project Requirements](#project-requirements)
